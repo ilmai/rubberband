@@ -389,7 +389,7 @@ endif # system
 
 
 general_include_dirs += get_option('extra_include_dirs')
-general_compile_args = [ arch_flags, feature_defines ]
+general_compile_args = [ arch_flags, feature_defines, '-Wno-sign-compare', '-Wno-unused-parameter' ]
 general_dependencies = [ feature_dependencies, thread_dep ]
 
 if system == 'windows'
