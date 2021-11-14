@@ -314,6 +314,7 @@ have_sndfile = sndfile_dep.found()
 
 ladspa_symbol_args = []
 vamp_symbol_args = []
+warning_args = []
 
 if get_option('buildtype').startswith('release')
   config_summary += { 'Build type': 'Release' }
@@ -383,11 +384,13 @@ else # system not darwin or windows
   vamp_symbol_args += [
     '-Wl,--version-script=' + meson.source_root() / 'vamp/vamp-plugin.map'
   ]
+  warning_args += [
+    '-Wno-sign-compare', '-Wno-unused-parameter'
+  ]
 endif # system
 
-
 general_include_dirs += get_option('extra_include_dirs')
-general_compile_args = [ arch_flags, feature_defines ]
+general_compile_args = [ arch_flags, feature_defines, warning_args ]
 general_dependencies = [ feature_dependencies, thread_dep ]
 
 if system == 'windows'
@@ -438,6 +441,7 @@ rubberband_static = static_library(
 
 rubberband_static_dep = declare_dependency(
   link_with: rubberband_static,
+  include_directories : include_directories('rubberband')
 )
 
 if not get_option('no_shared')
